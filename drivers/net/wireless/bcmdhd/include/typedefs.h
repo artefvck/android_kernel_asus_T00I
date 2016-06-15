@@ -1,24 +1,6 @@
 /*
- * Copyright (C) 1999-2013, Broadcom Corporation
- * 
- *      Unless you and Broadcom execute a separate written software license
- * agreement governing use of this software, this software is licensed to you
- * under the terms of the GNU General Public License version 2 (the "GPL"),
- * available at http://www.broadcom.com/licenses/GPLv2.php, with the
- * following added to such license:
- * 
- *      As a special exception, the copyright holders of this software give you
- * permission to link this software with independent modules, and to copy and
- * distribute the resulting executable under terms of your choice, provided that
- * you also meet, for each linked independent module, the terms and conditions of
- * the license of that module.  An independent module is a module which is not
- * derived from this software.  The special exception does not apply to any
- * modifications of the software.
- * 
- *      Notwithstanding the above, under no circumstances may you combine this
- * software in any way with any other Broadcom software provided under a license
- * other than the GPL, without Broadcom's express prior written consent.
- * $Id: typedefs.h 286783 2011-09-29 06:18:57Z $
+ * $Copyright Open Broadcom Corporation$
+ * $Id: typedefs.h 484281 2014-06-12 22:42:26Z $
  */
 
 #ifndef _TYPEDEFS_H_
@@ -65,7 +47,7 @@
 
 #endif	/* ! __cplusplus */
 
-#if defined(__x86_64__)
+#if defined(__LP64__)
 #define TYPEDEF_UINTPTR
 typedef unsigned long long int uintptr;
 #endif
@@ -81,10 +63,10 @@ typedef long unsigned int size_t;
 
 
 
+
 #if defined(__sparc__)
 #define TYPEDEF_ULONG
 #endif
-
 
 /*
  * If this is either a Linux hybrid build or the per-port code of a hybrid build
@@ -115,13 +97,11 @@ typedef long unsigned int size_t;
 #endif  /* !defined(LINUX_HYBRID) || defined(LINUX_PORT) */
 
 
-
-
 /* Do not support the (u)int64 types with strict ansi for GNU C */
 #if defined(__GNUC__) && defined(__STRICT_ANSI__)
 #define TYPEDEF_INT64
 #define TYPEDEF_UINT64
-#endif
+#endif /* defined(__GNUC__) && defined(__STRICT_ANSI__) */
 
 /* ICL accepts unsigned 64 bit type only, and complains in ANSI mode
  * for signed or unsigned
@@ -148,13 +128,11 @@ typedef long unsigned int size_t;
 
 #else
 
-
 #include <sys/types.h>
 
 #endif /* linux && __KERNEL__ */
 
 #endif 
-
 
 
 /* use the default typedefs in the next section of this file */
@@ -172,7 +150,7 @@ typedef long unsigned int size_t;
 
 #ifndef TYPEDEF_BOOL
 typedef	/* @abstract@ */ unsigned char	bool;
-#endif
+#endif /* endif TYPEDEF_BOOL */
 
 /* define uchar, ushort, uint, ulong */
 

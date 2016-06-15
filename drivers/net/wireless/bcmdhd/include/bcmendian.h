@@ -1,27 +1,9 @@
 /*
  * Byte order utilities
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
- * 
- *      Unless you and Broadcom execute a separate written software license
- * agreement governing use of this software, this software is licensed to you
- * under the terms of the GNU General Public License version 2 (the "GPL"),
- * available at http://www.broadcom.com/licenses/GPLv2.php, with the
- * following added to such license:
- * 
- *      As a special exception, the copyright holders of this software give you
- * permission to link this software with independent modules, and to copy and
- * distribute the resulting executable under terms of your choice, provided that
- * you also meet, for each linked independent module, the terms and conditions of
- * the license of that module.  An independent module is a module which is not
- * derived from this software.  The special exception does not apply to any
- * modifications of the software.
- * 
- *      Notwithstanding the above, under no circumstances may you combine this
- * software in any way with any other Broadcom software provided under a license
- * other than the GPL, without Broadcom's express prior written consent.
+ * $Copyright Open Broadcom Corporation$
  *
- *  $Id: bcmendian.h 241182 2011-02-17 21:50:03Z $
+ *  $Id: bcmendian.h 402715 2013-05-16 18:50:09Z $
  *
  * This file by default provides proper behavior on little-endian architectures.
  * On big-endian architectures, IL_BIGENDIAN should be defined.
@@ -49,6 +31,23 @@
 	((uint32)((((uint32)(val) & (uint32)0x0000ffffU) << 16) | \
 		  (((uint32)(val) & (uint32)0xffff0000U) >> 16)))
 
+/* Reverse the bytes in a 64-bit value */
+#define BCMSWAP64(val) \
+	((uint64)((((uint64)(val) & 0x00000000000000ffULL) << 56) | \
+	          (((uint64)(val) & 0x000000000000ff00ULL) << 40) | \
+	          (((uint64)(val) & 0x0000000000ff0000ULL) << 24) | \
+	          (((uint64)(val) & 0x00000000ff000000ULL) <<  8) | \
+	          (((uint64)(val) & 0x000000ff00000000ULL) >>  8) | \
+	          (((uint64)(val) & 0x0000ff0000000000ULL) >> 24) | \
+	          (((uint64)(val) & 0x00ff000000000000ULL) >> 40) | \
+	          (((uint64)(val) & 0xff00000000000000ULL) >> 56)))
+
+/* Reverse the two 32-bit halves of a 64-bit value */
+#define BCMSWAP64BY32(val) \
+	((uint64)((((uint64)(val) & 0x00000000ffffffffULL) << 32) | \
+	          (((uint64)(val) & 0xffffffff00000000ULL) >> 32)))
+
+
 /* Byte swapping macros
  *    Host <=> Network (Big Endian) for 16- and 32-bit values
  *    Host <=> Little-Endian for 16- and 32-bit values
@@ -70,6 +69,8 @@
 #define htol16(i) (i)
 #define HTOL32(i) (i)
 #define htol32(i) (i)
+#define HTOL64(i) (i)
+#define htol64(i) (i)
 #endif /* hton16 */
 
 #define ltoh16_buf(buf, i)
@@ -112,6 +113,11 @@
 #define bcmswap32(val) ({ \
 	uint32 _val = (val); \
 	BCMSWAP32(_val); \
+})
+
+#define bcmswap64(val) ({ \
+	uint64 _val = (val); \
+	BCMSWAP64(_val); \
 })
 
 #define bcmswap32by16(val) ({ \
@@ -193,6 +199,12 @@ static INLINE uint32
 bcmswap32(uint32 val)
 {
 	return BCMSWAP32(val);
+}
+
+static INLINE uint64
+bcmswap64(uint64 val)
+{
+	return BCMSWAP64(val);
 }
 
 static INLINE uint32
